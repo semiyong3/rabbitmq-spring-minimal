@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication
-public class DemoApplication {
+public class TopicApplication {
 
 	static final String topicExchangeName = "spring-boot-exchange";
 
@@ -51,18 +51,19 @@ public class DemoApplication {
 
 	@Bean
 	public ConnectionFactory connectionFactory() {
-		//CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+		// CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+		
+		connectionFactory.setPort(Integer.parseInt(env.getProperty("rabbitmq.port")));
+		connectionFactory.setUsername(env.getProperty("rabbitmq.user"));
+		connectionFactory.setPassword(env.getProperty("rabbitmq.password"));
+		connectionFactory.setHost(env.getProperty("rabbitmq.ip"));
+		 
 		/*
-		 * connectionFactory.setPort(Integer.parseInt(env.getProperty("rabbitmq.port")))
-		 * ; connectionFactory.setUsername(env.getProperty("rabbitmq.user"));
-		 * connectionFactory.setPassword(env.getProperty("rabbitmq.password"));
-		 * connectionFactory.setHost(env.getProperty("rabbitmq.ip"));
-		 */	    connectionFactory.setPort(5672);
-		connectionFactory.setUsername("rabbitmq");
-		connectionFactory.setPassword("alsgml");
-		connectionFactory.setHost("127.0.0.1");
-
+		 * connectionFactory.setPort(5672); connectionFactory.setUsername("rabbitmq");
+		 * connectionFactory.setPassword("alsgml");
+		 * connectionFactory.setHost("127.0.0.1");
+		 */
 		return connectionFactory;
 	}
 
@@ -71,8 +72,8 @@ public class DemoApplication {
 		return new MessageListenerAdapter(receiver, "receiveMessage");
 	}
 
+	
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(TopicApplication.class, args); 
 	}
-
 }
