@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.lucern.rabbitmq.topic;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,9 +19,18 @@ public class Runner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend(TopicApplication.topicExchangeName, "foo.bar.baz", "Hello from RabbitMQ!");
-        receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
-    }
+        System.out.println("Sending start message...");
 
+        for (int i=0; i<TopicApplication.sendCount; i++) {
+        	rabbitTemplate.convertAndSend(TopicApplication.topicExchangeName, TopicApplication.routingKey, " count = " + i + ", exchangeName = "
+        			+ TopicApplication.topicExchangeName + ", routingKey = " + TopicApplication.routingKey +  ", message = hello lucern!!");
+        }
+        
+        System.out.println("Sending end message...");
+       
+        receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+
+        System.out.println("Receiving end message...");
+
+    }
 }

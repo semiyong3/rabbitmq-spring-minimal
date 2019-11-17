@@ -11,11 +11,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
-import com.example.demo.TopicApplication;
+import com.lucern.rabbitmq.topic.TopicApplication;
 
 @Component
 public class SendScheduler {
-	
+	/*
 	@Autowired
 	private Environment env;
 
@@ -30,7 +30,7 @@ public class SendScheduler {
         
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        IntStream.range(1, 15000)
+        IntStream.range(1, 1500)
                     .parallel()
                     .forEach(val -> {
                         rabbitTemplate.convertAndSend(env.getProperty("rabbitmq.routingKey"), "Hello~~~~~~~~, RabbitMQ! 1");
@@ -39,4 +39,5 @@ public class SendScheduler {
         logger.info(stopWatch.toString());
         logger.info("Sending message... End");
     }
+    */
 }

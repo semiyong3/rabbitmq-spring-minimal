@@ -10,7 +10,7 @@ public class DirectReceiver {
  
     private static final Logger logger = LoggerFactory.getLogger(DirectReceiver.class);
     
-    @RabbitListener(queues = DirectApplication.QUEUE_NAME)
+    //@RabbitListener(queues = DirectApplication.QUEUE_NAME)
     public void onMessage(String msg) {
         logger.info("Received < " + msg.toString() + " >");
     }

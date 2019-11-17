@@ -32,6 +32,7 @@ public class RabbitMqConfig {
     @Bean
     public RabbitTemplate rabbitTemplate() {
          RabbitTemplate rabbitTemplate = new RabbitTemplate();
+         //rabbitTemplate.setExchange(env.getProperty("rabbitmq.exchange"));
          rabbitTemplate.setExchange(env.getProperty("rabbitmq.exchange"));
          rabbitTemplate.setRoutingKey(env.getProperty("rabbitmq.routingKey"));
          //rabbitTemplate.setQueue(env.getProperty("rabbitmq.queueName"));
