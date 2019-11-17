@@ -1,9 +1,9 @@
-package com.lucern.rabbitmq.topic;
+package com.lucern.rabbitmq.direct;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,14 +16,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
-//@SpringBootApplication
-//@Configuration
-public class TopicApplication {
+@SpringBootApplication
+@Configuration
+public class DirectApplication {
 
-	static final String topicExchangeName = "spring-boot-topic-exchange";
-	static final String queueName = "spring-boot-topic-queue";
-	static final String topic = "foo.bar.#";
-	static final String routingKey = "foo.bar.bus";
+	static final String directExchangeName = "spring-boot-direct-exchange";
+	static final String queueName = "spring-boot-direct-queue";
+	static final String routingKey = "direct.routing.key";
 	static final int sendCount = 100000;
 
 	@Autowired
@@ -35,13 +34,13 @@ public class TopicApplication {
 	}
 
 	@Bean
-	TopicExchange exchange() {
-		return new TopicExchange(topicExchangeName);
+	DirectExchange exchange() {
+		return new DirectExchange(directExchangeName);
 	}
 
 	@Bean
-	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(topic);
+	Binding binding(Queue queue, DirectExchange exchange) {
+		return BindingBuilder.bind(queue).to(exchange).with(routingKey);
 	}
 
 	@Bean
@@ -61,7 +60,7 @@ public class TopicApplication {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory());
 		container.setQueueNames(queueName);
-		container.setMessageListener(topicListenerAdapter());
+		container.setMessageListener(directListenerAdapter());
 		
 		return container;
 	}
@@ -70,20 +69,20 @@ public class TopicApplication {
 	public RabbitTemplate rabbitTemplate() { 
 		RabbitTemplate template = new RabbitTemplate();
 		  
-		template.setExchange(topicExchangeName);
-		template.setRoutingKey("foo.bar.bus");
+		template.setExchange(directExchangeName);
+		template.setRoutingKey(routingKey);
 		template.setConnectionFactory(connectionFactory());
 		  
 	    return template; 
 	}
 	 
     @Bean
-	MessageListenerAdapter topicListenerAdapter() {
+	MessageListenerAdapter directListenerAdapter() {
 		return new MessageListenerAdapter(new Receiver(), "receiveMessage");
 	}
-/*
+
 	public static void main(String[] args) {
-		 SpringApplication.run(TopicApplication.class, args); 
+		 SpringApplication.run(DirectApplication.class, args); 
 	}
-*/
+	  
 }
